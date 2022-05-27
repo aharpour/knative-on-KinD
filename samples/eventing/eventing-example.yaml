@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-display
+spec:
+  replicas: 1
+  selector:
+    matchLabels: &labels
+      app: hello-display
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: event-display
+          image: gcr.io/knative-releases/knative.dev/eventing-contrib/cmd/event_display
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hello-display
+spec:
+  selector:
+    app: hello-display
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: hello-display
+spec:
+  broker: my-broker
+  filter:
+    attributes:
+      type: greeting
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: hello-display
+---
+apiVersion: networking.internal.knative.dev/v1alpha1
+kind: ClusterDomainClaim
+metadata:
+  name: broker-ingress.knative-eventing.127.0.0.1.sslip.io
+spec:
+  namespace: knative-eventing
+---
+apiVersion: serving.knative.dev/v1alpha1
+kind: DomainMapping
+metadata:
+  namespace: knative-eventing
+  name: broker-ingress.knative-eventing.127.0.0.1.sslip.io
+spec:
+  ref:
+    name: broker-ingress
+    kind: Service
+    apiVersion: v1

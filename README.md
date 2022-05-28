@@ -13,7 +13,7 @@ To clean it up
 ```
 
 # Prerequisite
-This script assumes that docker and [KinD](https://kind.sigs.k8s.io/docs/user/quick-start#installation) are already installed
+This script assumes that Docker and [KinD](https://kind.sigs.k8s.io/docs/user/quick-start#installation) are already installed
 
 # Versions
 * Kubernetes - 1.24.0

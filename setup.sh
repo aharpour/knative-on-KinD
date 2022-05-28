@@ -23,4 +23,22 @@ kubectl apply -f eventing-core.yaml
 kubectl apply -f in-memory-channel.yaml
 kubectl apply -f mt-channel-broker.yaml
 
-echo "Run the following command to see when all the pod are ready: kubectl get po --all-namespaces -o wide -w"
+## waiting for Setup to be completed
+kubectl wait -n knative-serving   Deployment   activator              --timeout=90s --for=condition=available
+kubectl wait -n knative-serving   Deployment   autoscaler             --timeout=90s --for=condition=available
+kubectl wait -n knative-serving   Deployment   controller             --timeout=90s --for=condition=available
+kubectl wait -n knative-serving   Deployment   domain-mapping         --timeout=90s --for=condition=available
+kubectl wait -n knative-serving   Deployment   domainmapping-webhook  --timeout=90s --for=condition=available
+kubectl wait -n knative-serving   Deployment   net-kourier-controller --timeout=90s --for=condition=available
+kubectl wait -n knative-serving   Deployment   webhook                --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   eventing-controller    --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   eventing-webhook       --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   imc-controller         --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   imc-dispatcher         --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   mt-broker-controller   --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   mt-broker-filter       --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   mt-broker-ingress      --timeout=90s --for=condition=available
+kubectl wait -n knative-eventing  Deployment   pingsource-mt-adapter  --timeout=90s --for=condition=available
+kubectl wait -n kourier-system    Deployment   3scale-kourier-gateway --timeout=90s --for=condition=available
+
+echo "Your Knative environment is ready!"

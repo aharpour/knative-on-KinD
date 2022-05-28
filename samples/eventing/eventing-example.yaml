@@ -1,3 +1,9 @@
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+  name: my-broker
+  namespace: default
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
